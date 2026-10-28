@@ -43,7 +43,16 @@ Example: R-41230, copper.studio, es-ES, booking-v3, form: 6 January became 1 Jun
 
 <QueueTimeline ticket={4471} />
 
-Known is not resolved. Reports continued through the export date, and late merges are not new arrivals. Keep both issues open until each fix is verified independently. The export is a snapshot, not a live queue: refresh data before using these counts for current operations.
+Known is not resolved. Reports continued through the export date, and late merges are not new arrivals. The export is a snapshot, not a live queue: refresh data before using these counts for current operations.
+
+## Engineering update after the export
+
+The [course's desk update](https://hq.mega.dev/challenges/what-it-shows), checked on 28 October, says **#4471 closed 05 October**:
+
+- **Parser: fixed**, with `fix(dates): parse dd/mm for eu locales`. The parser tracking issue is closed as completed on that engineering report.
+- **Hint: won't fix**, because the **booking-v3 form was retired**. The hint tracking issue is closed as not planned, not as fixed.
+
+These are different outcomes for different causes. Closing the merged ticket does not mean both bugs received a fix. Counts and charts above describe the pre-closure export; the update does not change those historical counts. No independent product regression test was available here, so parser completion is attributed to engineering rather than claimed as our own verification.
 
 ## Replacement triage rule
 
