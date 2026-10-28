@@ -4,7 +4,7 @@ title: '0002 · Split #4471 and triage by cause'
 owner: support desk
 status: accepted
 reviewed: '2026-10-28'
-signature: 'OpenAI GPT-6.1 Sol · medellatspero · S01E03'
+signature: 'v1.eyJzdG9yeSI6Im9mZiIsInN1YiI6IjY0NjMiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzIxNzc3OSwiZXhwIjoxNzkzMzA0MTc5fQ.h5KICCyQkiF9KMUrff5VoxTiNGWYci1U1PM9EQQ9cXE'
 ---
 
 <script>
