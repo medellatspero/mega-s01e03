@@ -1,0 +1,65 @@
+---
+layout: runbook
+title: '0002 · Split #4471 and triage by cause'
+owner: support desk
+status: accepted
+reviewed: '2026-10-28'
+signature: 'OpenAI GPT-6.1 Sol · medellatspero · S01E03'
+---
+
+<script>
+  import IncidentReview from '#lib/kb/IncidentReview.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Decision
+
+This record supersedes [decision 0001](/kb/decisions/0001-dedupe-by-subject) and the subject-only rule in [triage](/kb/triage/dedupe). Keep the accepted historical record unchanged. The claim on [#4471](/kb/incidents/4471) that one fix covers the whole ticket is wrong: split by cause, not subject or browser intake tag.
+
+## What the export shows
+
+<IncidentReview />
+
+The following original component describes the exported desk state before this split; its “no ticket of its own” label is historical. The tracking links above are the replacement tickets.
+
+<CauseTable ticket={4471} />
+
+### Shared parser
+
+The shared parser reads month first for tenants that write day first. App and email reports, and booking-v2 form reports, go here for day-first tenants. Fix the parser to respect the tenant's date convention and test ambiguous and unambiguous dates across affected locales.
+
+Example: R-41200, harbour.dental, en-GB, app: a 7 April reminder went out on 4 July. R-41201 describes the reverse swap with a different subject. Different subjects can describe one cause.
+
+### Booking-v3 field hint
+
+For day-first tenants, booking-v3 prints MM/DD/YYYY, but the form interprets the entry using the tenant's day-first convention. Correct the hint to match the form's actual parsing. This is not the shared parser fix; validate the hint and form round-trip together.
+
+Example: R-41230, copper.studio, es-ES, booking-v3, form: 6 January became 1 June, despite intake tagging it parser. The tenant directory and form/channel determine the group; the reporter's browser locale does not.
+
+## The desk keeps working
+
+<QueueTimeline ticket={4471} />
+
+Known is not resolved. Reports continued through the export date, and late merges are not new arrivals. Keep both issues open until each fix is verified independently. The export is a snapshot, not a live queue: refresh data before using these counts for current operations.
+
+## Replacement triage rule
+
+1. Deduplicate overlapping export rows by report ID; never count the same ID twice.
+2. Look up the tenant's locale and booking form. Check the channel, actual input, expected date and observed output.
+3. For a day-first tenant, booking-v3 plus form maps to hint; the remaining channels/forms map to parser in the supplied model.
+4. Merge only when the cause matches. Subjects can be identical for different causes, or different for the same cause. Intake tags are guesses, not evidence.
+5. Unknown tenants or unsupported date conventions stay unplaced pending investigation; matching subjects alone do not justify merging.
+6. Route new reports to the corresponding issue. Track received and merged dates separately and monitor each cause after its fix. Escalate unexplained symptoms rather than declaring them fixed by this classification.
+
+<DedupeExplorer />
+
+## Consequences
+
+Triage requires a tenant lookup and reading evidence rather than a fast subject match. In return, engineering gets separate causes and counts, a hint bug is not hidden behind a queued parser fix, and new reports cannot silently keep extending a misleading known ticket.
+
+The computed tables use the supplied TypeScript cause logic, tenant directory and unique IDs. They will update when the source exports change. This decision does not establish that every individual symptom has already been reproduced or repaired.
+
+<RenderStamp {signature} />
